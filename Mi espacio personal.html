@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e9e0f8">
+  <title>Mi espacio personal</title>
+  <style>
+    :root { --ink:#4b4a63; --muted:#7c7b93; --paper:#fbf7fb; --card:#fff; --line:#ece3f0; --accent:#dff1e7; --field:#fffdff; --field-line:#e3d9ea; --btn-ink:#fff; --notice-bg:#fff4d9; --notice-line:#f3e2b0; --notice-ink:#7a6420; --side:#e9e0f8; --side-hover:#d8ccf2; --side-ink:#4b4a63; --side-muted:#7a7396; --primary:#b9a7e8; --primary-ink:#2f2750; --p1:#e6f4ec; --p2:#fde8ef; --p3:#e6edfb; box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) { --ink:#ece8f5; --muted:#a9a4bd; --paper:#1a1822; --card:#24212e; --line:#38334a; --accent:#34503f; --field:#1e1b27; --field-line:#3d3850; --btn-ink:#2b2540; --notice-bg:#2d2916; --notice-line:#4d4424; --notice-ink:#e8d79c; --side:#2a2538; --side-hover:#3a3450; --side-ink:#ece8f5; --side-muted:#b6b0cc; --primary:#b9a7e8; --primary-ink:#2b2540; --p1:#25362e; --p2:#3a2733; --p3:#263045; }
+    }
+    :root[data-theme="dark"] { --ink:#ece8f5; --muted:#a9a4bd; --paper:#1a1822; --card:#24212e; --line:#38334a; --accent:#34503f; --field:#1e1b27; --field-line:#3d3850; --btn-ink:#2b2540; --notice-bg:#2d2916; --notice-line:#4d4424; --notice-ink:#e8d79c; --side:#2a2538; --side-hover:#3a3450; --side-ink:#ece8f5; --side-muted:#b6b0cc; --primary:#b9a7e8; --primary-ink:#2b2540; --p1:#25362e; --p2:#3a2733; --p3:#263045; }
+    html { scroll-padding-top:env(safe-area-inset-top,0px); }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif; }
+    button,input,textarea,select { font:inherit; }
+    button { cursor:pointer; }
+    .app { max-width:1180px; margin:auto; min-height:100vh; display:grid; grid-template-columns:245px 1fr; }
+    aside { background:var(--side); color:var(--side-ink); padding:26px 18px; }
+    .brand { font-size:1.2rem; font-weight:750; letter-spacing:.01em; margin:0 8px 6px; }
+    .subbrand { color:var(--side-muted); font-size:.85rem; margin:0 8px 28px; }
+    nav { display:grid; gap:7px; }
+    nav button { text-align:left; border:0; border-radius:10px; padding:11px 12px; background:transparent; color:var(--side-ink); }
+    nav button.active, nav button:hover { background:var(--side-hover); color:var(--side-ink); }
+    .aside-note { margin:30px 8px 0; color:var(--side-muted); font-size:.82rem; }
+    main { padding:34px clamp(18px,4vw,48px); min-width:0; }
+    .topline { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:28px; }
+    .eyebrow { color:var(--muted); text-transform:uppercase; letter-spacing:.12em; font-size:.74rem; font-weight:700; }
+    h1 { margin:4px 0 0; font-size:clamp(1.7rem,3vw,2.4rem); line-height:1.2; }
+    h2 { font-size:1.15rem; margin:0 0 12px; }
+    p { margin-top:6px; }
+    .pill { border:1px solid var(--line); border-radius:999px; padding:7px 11px; color:var(--muted); font-size:.83rem; background:var(--card); }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-bottom:20px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:19px; min-width:0; }
+    .stat-number { font-size:1.7rem; font-weight:750; margin-top:4px; }
+    .muted { color:var(--muted); font-size:.9rem; }
+    .section-head { display:flex; justify-content:space-between; gap:12px; align-items:center; margin:24px 0 12px; }
+    .primary { background:var(--primary); color:var(--primary-ink); border:0; border-radius:10px; padding:10px 14px; font-weight:650; }
+    .secondary { background:var(--card); color:var(--ink); border:1px solid var(--line); border-radius:10px; padding:9px 12px; }
+    .field { display:grid; gap:6px; margin:12px 0; }
+    label { font-size:.88rem; font-weight:650; }
+    input,textarea,select { width:100%; padding:11px 12px; border:1px solid var(--field-line); border-radius:10px; background:var(--field); color:var(--ink); }
+    textarea { min-height:100px; resize:vertical; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .list { display:grid; gap:10px; }
+    .item { display:flex; gap:12px; align-items:flex-start; padding:12px 0; border-bottom:1px solid var(--line); }
+    .item:last-child { border-bottom:0; }
+    .item input[type=checkbox] { width:18px; margin-top:5px; accent-color:var(--ink); }
+    .item-title { font-weight:650; overflow-wrap:anywhere; }
+    .done { text-decoration:line-through; color:var(--muted); }
+    .tag { display:inline-block; padding:3px 8px; background:var(--accent); border-radius:999px; font-size:.76rem; margin-top:4px; }
+    .empty { border:1px dashed var(--field-line); border-radius:12px; padding:20px; text-align:center; color:var(--muted); }
+    .notice { background:var(--notice-bg); border:1px solid var(--notice-line); color:var(--notice-ink); padding:12px 14px; border-radius:12px; font-size:.88rem; margin-top:20px; }
+    .hidden { display:none !important; }
+    .search { max-width:310px; }
+    .file-link { color:var(--ink); font-weight:650; }
+    footer { color:var(--muted); font-size:.8rem; padding:25px 0 8px; }
+    .tools { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .global-search { position:relative; }
+    .global-search input { width:240px; }
+    .results { position:absolute; right:0; top:calc(100% + 6px); width:min(360px,86vw); background:var(--card); border:1px solid var(--line); border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.18); max-height:340px; overflow:auto; z-index:20; }
+    .result { display:block; width:100%; text-align:left; border:0; background:transparent; color:var(--ink); padding:10px 12px; border-bottom:1px solid var(--line); }
+    .result:last-child { border-bottom:0; }
+    .result:hover, .result:focus-visible { background:var(--accent); }
+    .result .muted { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .modal { position:fixed; inset:0; background:rgba(10,20,15,.55); display:flex; align-items:center; justify-content:center; padding:20px; z-index:50; }
+    .modal-box { background:var(--card); color:var(--ink); border:1px solid var(--line); border-radius:16px; padding:22px; width:min(520px,100%); max-height:90vh; overflow:auto; }
+    .modal-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:14px; }
+    .form-error { color:#b3402f; min-height:1.3em; font-size:.88rem; }
+    @media(max-width:760px) {
+      .tools { width:100%; }
+      .global-search { flex:1 1 100%; }
+      .global-search input { width:100%; }
+    }
+    @media(max-width:760px) {
+      .app { display:block; }
+      aside { padding:16px 14px 12px; }
+      .brand { margin-bottom:0; }
+      .subbrand { margin-bottom:12px; }
+      nav { display:flex; overflow:auto; padding-bottom:3px; }
+      nav button { white-space:nowrap; padding:9px 11px; }
+      .aside-note { display:none; }
+      main { padding:23px 15px; }
+      .stats { grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+      .stat-number { font-size:1.35rem; }
+      .stats .card { padding:12px; }
+      .grid { grid-template-columns:1fr; }
+      .form-row { grid-template-columns:1fr; gap:0; }
+      .topline { margin-bottom:20px; }
+    }
+    .stats .card:nth-child(1) { background:var(--p1); }
+    .stats .card:nth-child(2) { background:var(--p2); }
+    .stats .card:nth-child(3) { background:var(--p3); }
+    .card, .primary, .secondary, input, textarea, select { transition:background .2s, border-color .2s; }
+    @media(max-width:760px) {
+      aside { position:sticky; top:0; z-index:15; }
+      nav button { min-height:44px; border-radius:999px; font-size:.95rem; }
+      main { padding-left:max(15px,env(safe-area-inset-left,0px)); padding-right:max(15px,env(safe-area-inset-right,0px)); }
+      h1 { font-size:1.5rem; }
+      .card { padding:16px; }
+      .section-head { flex-direction:column; align-items:stretch; gap:8px; }
+      .search { max-width:none; }
+      #task-filter { max-width:none !important; }
+      .primary, .secondary { min-height:44px; }
+      .item .secondary { min-height:38px; padding:8px 10px; font-size:.85rem; }
+      .item input[type=checkbox] { width:22px; height:22px; margin-top:3px; }
+      .tools .primary { flex:1; }
+      .results { left:0; right:0; width:auto; }
+      .modal { align-items:flex-end; padding:0; }
+      .modal-box { width:100%; border-radius:18px 18px 0 0; max-height:88vh; padding-bottom:calc(22px + env(safe-area-inset-bottom,0px)); }
+      .modal-actions { flex-direction:column-reverse; }
+      .modal-actions button { width:100%; }
+    }
+    @media(max-width:420px) {
+      .stats { grid-template-columns:1fr; }
+      .stats .card { display:flex; justify-content:space-between; align-items:center; }
+      .stat-number { margin-top:0; }
+      .pill { font-size:.78rem; }
+    }
+    .tag { margin-right:6px; }
+    .tag.alta { background:#fbd5e0; color:#6b2440; }
+    .tag.normal { background:#d9e4f9; color:#27407a; }
+    .tag.baja { background:#d5efdf; color:#235239; }
+    .tag.vencida { background:#ffe0d6; color:#8a3318; }
+    .actions { display:flex; gap:6px; flex-shrink:0; }
+    .toast { position:fixed; left:50%; transform:translateX(-50%); bottom:calc(16px + env(safe-area-inset-bottom,0px)); background:var(--ink); color:var(--paper); padding:11px 16px; border-radius:12px; display:flex; gap:14px; align-items:center; z-index:60; max-width:92vw; box-shadow:0 8px 24px rgba(0,0,0,.2); }
+    .toast button { background:transparent; color:inherit; border:0; font-weight:700; text-decoration:underline; padding:0; }
+    .btn-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+    textarea.code { font-family:ui-monospace,Menlo,monospace; font-size:.8rem; min-height:140px; }
+    @media(max-width:760px) { .actions { flex-direction:column; } .btn-row .primary { width:100%; } }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">Mi espacio personal</div>
+    <div class="subbrand">Tu información, organizada</div>
+    <nav aria-label="Navegación principal">
+      <button class="active" data-page="inicio">⌂ &nbsp; Inicio</button>
+      <button data-page="notas">✎ &nbsp; Notas</button>
+      <button data-page="documentos">▤ &nbsp; Documentos</button>
+      <button data-page="investigacion">▣ &nbsp; Investigación</button>
+      <button data-page="tareas">☑ &nbsp; Tareas</button>
+      <button data-page="archivos">▧ &nbsp; Fotografías y archivos</button>
+      <button data-page="respaldo">⇅ &nbsp; Respaldo</button>
+    </nav>
+    <div class="aside-note">Versión de aprendizaje · Prototipo local</div>
+  </aside>
+
+  <main>
+    <div class="topline">
+      <div>
+        <div class="eyebrow">Tu biblioteca digital</div>
+        <h1 id="page-title">Bienvenida a tu espacio</h1>
+      </div>
+      <div class="tools">
+        <div class="global-search">
+          <input id="global-search" type="search" placeholder="Buscar en todo mi espacio..." aria-label="Buscar en todo mi espacio" autocomplete="off">
+          <div id="search-results" class="results hidden" role="listbox"></div>
+        </div>
+        <button class="primary" id="open-new-note">+ Nueva nota</button>
+        <div class="pill" id="today"></div>
+      </div>
+    </div>
+
+    <section id="page-inicio">
+      <p class="muted">Un lugar para reunir tus notas, estudios, documentos y pendientes.</p>
+      <div class="stats">
+        <div class="card" data-goto="notas" style="cursor:pointer"><div class="muted">Notas guardadas</div><div class="stat-number" id="count-notes">0</div></div>
+        <div class="card" data-goto="tareas" style="cursor:pointer"><div class="muted">Tareas pendientes</div><div class="stat-number" id="count-tasks">0</div></div>
+        <div class="card" data-goto="investigacion" style="cursor:pointer"><div class="muted">Referencias</div><div class="stat-number" id="count-refs">0</div></div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <h2>Captura una idea</h2>
+          <p class="muted">Guarda una nota para consultarla después.</p>
+          <div class="field"><label for="quick-note">Título</label><input id="quick-note" placeholder="Ej. Idea para mi investigación"></div>
+          <div class="field"><label for="quick-body">Contenido</label><textarea id="quick-body" placeholder="Escribe aquí..."></textarea></div>
+          <button class="primary" id="save-quick-note">Guardar nota</button>
+        </div>
+        <div class="card">
+          <h2>Próximas tareas</h2>
+          <div id="home-tasks" class="list"></div>
+          <div style="margin-top:14px"><button class="secondary" data-goto="tareas">Ver todas las tareas →</button></div>
+        </div>
+      </div>
+      <div class="notice"><strong>Antes de usarla:</strong> esta primera versión guarda datos en este navegador. Todavía no sincroniza entre dispositivos ni permite compartir de forma segura. No guardes contraseñas ni documentos sensibles aquí.</div>
+    </section>
+
+    <section id="page-notas" class="hidden">
+      <p class="muted">Aquí puedes leer todas las notas que has guardado y eliminar las que ya no necesites.</p>
+      <div class="section-head"><h2>Mis notas</h2><input class="search" id="note-search" placeholder="Buscar en notas..."></div>
+      <div class="card"><div id="note-list" class="list"></div></div>
+      <div style="margin-top:14px"><button class="secondary" data-goto="inicio">← Capturar una nota nueva</button></div>
+    </section>
+
+    <section id="page-documentos" class="hidden">
+      <p class="muted">Guarda datos descriptivos, notas y enlaces a documentos importantes.</p>
+      <div class="card">
+        <h2>Agregar documento o enlace</h2>
+        <div class="form-row">
+          <div class="field"><label for="doc-title">Nombre</label><input id="doc-title" placeholder="Ej. Constancia de curso"></div>
+          <div class="field"><label for="doc-category">Categoría</label><select id="doc-category"><option>Personal</option><option>Trabajo</option><option>Estudios</option><option>Trámites</option><option>Otro</option></select></div>
+        </div>
+        <div class="field"><label for="doc-url">Enlace (opcional)</label><input id="doc-url" type="url" placeholder="https://..."></div>
+        <div class="field"><label for="doc-notes">Notas</label><textarea id="doc-notes" placeholder="Descripción o ubicación del documento"></textarea></div>
+        <button class="primary" id="add-doc">Agregar a mi lista</button>
+      </div>
+      <div class="section-head"><h2>Mis documentos</h2><input class="search" id="doc-search" placeholder="Buscar documento..."></div>
+      <div class="card"><div id="doc-list" class="list"></div></div>
+    </section>
+
+    <section id="page-investigacion" class="hidden">
+      <p class="muted">Organiza preguntas, lecturas, referencias y avances de tus proyectos.</p>
+      <div class="card">
+        <h2>Agregar nota o referencia</h2>
+        <div class="form-row">
+          <div class="field"><label for="ref-title">Título</label><input id="ref-title" placeholder="Título del libro, artículo o idea"></div>
+          <div class="field"><label for="ref-type">Tipo</label><select id="ref-type"><option>Nota de investigación</option><option>Libro</option><option>Artículo académico</option><option>Archivo</option><option>Fotografía</option><option>Otro</option></select></div>
+        </div>
+        <div class="field"><label for="ref-author">Autor o institución (opcional)</label><input id="ref-author" placeholder="Apellido, nombre o institución"></div>
+        <div class="field"><label for="ref-body">Resumen, referencia o comentario</label><textarea id="ref-body" placeholder="Anota los datos que quieras recordar..."></textarea></div>
+        <button class="primary" id="add-ref">Guardar en investigación</button>
+      </div>
+      <div class="section-head"><h2>Mi investigación</h2><input class="search" id="ref-search" placeholder="Buscar en notas..."></div>
+      <div class="card"><div id="ref-list" class="list"></div></div>
+    </section>
+
+    <section id="page-tareas" class="hidden">
+      <p class="muted">Registra pendientes y marca lo que hayas terminado.</p>
+      <div class="card">
+        <h2>Nueva tarea</h2>
+        <div class="field"><label for="task-title">¿Qué necesitas hacer?</label><input id="task-title" placeholder="Ej. Revisar bibliografía"></div>
+        <div class="form-row">
+          <div class="field"><label for="task-date">Fecha límite (opcional)</label><input id="task-date" type="date"></div>
+          <div class="field"><label for="task-priority">Prioridad</label><select id="task-priority"><option>Normal</option><option>Alta</option><option>Baja</option></select></div>
+        </div>
+        <button class="primary" id="add-task">Agregar tarea</button>
+      </div>
+      <div class="section-head"><h2>Lista de tareas</h2><select id="task-filter" style="max-width:170px"><option value="all">Todas</option><option value="open">Pendientes</option><option value="done">Completadas</option></select></div>
+      <div class="card"><div id="task-list" class="list"></div></div>
+    </section>
+
+    <section id="page-archivos" class="hidden">
+      <p class="muted">Selecciona imágenes o archivos para verlos en esta sesión. En esta versión no se suben a internet.</p>
+      <div class="card">
+        <h2>Vista previa local</h2>
+        <div class="field"><label for="local-files">Elegir fotografías o archivos</label><input id="local-files" type="file" multiple accept="image/*,.pdf,.doc,.docx,.txt"></div>
+        <div id="file-list" class="list"><div class="empty">Los archivos que selecciones aparecerán aquí temporalmente.</div></div>
+      </div>
+      <div class="notice">Los archivos elegidos aquí no se guardan de forma permanente ni se comparten. La carga privada a la nube se implementará en una etapa posterior.</div>
+    </section>
+    <section id="page-respaldo" class="hidden">
+      <p class="muted">Guarda una copia para no perder tu información si borras el historial o cambias de teléfono.</p>
+      <div class="card"><h2>Copia de seguridad</h2><p class="muted">Copia este texto y guárdalo en un lugar seguro, por ejemplo en un correo para ti. No incluye los archivos elegidos en Fotografías y archivos.</p><textarea id="backup-text" class="code" readonly aria-label="Texto del respaldo"></textarea><div class="btn-row"><button class="primary" id="copy-backup">Copiar respaldo</button></div></div>
+      <div class="card" style="margin-top:16px"><h2>Restaurar</h2><p class="muted">Pega un respaldo o elige el archivo. Reemplaza lo que tienes ahora y podrás deshacerlo.</p><textarea id="restore-text" class="code" aria-label="Pegar respaldo" placeholder="Pega aquí tu respaldo..."></textarea><div id="restore-error" class="form-error" role="alert"></div><div class="btn-row"><button class="primary" id="restore-btn">Restaurar</button><input id="restore-file" type="file" accept=".json,application/json" aria-label="Elegir archivo de respaldo"></div></div>
+    </section>
+    <footer>Prototipo educativo · Los datos se guardan en el almacenamiento local del navegador.</footer>
+  </main>
+</div>
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+<div id="modal" class="modal hidden"><div id="modal-box" class="modal-box" role="dialog" aria-modal="true"></div></div>
+<script>
+  const $ = id => document.getElementById(id);
+  const storageKey = 'mi-espacio-personal-v1';
+  let state = { docs: [], refs: [], tasks: [], notes: [] };
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey) || 'null');
+    if (saved) state = { ...state, ...saved };
+  } catch (e) {}
+  const persist = () => { try { localStorage.setItem(storageKey, JSON.stringify(state)); } catch (e) {} };
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const dateLabel = d => d ? new Date(d+'T12:00:00').toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'}) : '';
+  $('today').textContent = new Date().toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});
+  const titles = {inicio:'Bienvenida a tu espacio',documentos:'Documentos importantes',investigacion:'Investigación y estudios',tareas:'Tareas y recordatorios',archivos:'Fotografías y archivos',notas:'Mis notas',respaldo:'Respaldo de tus datos'};
+  function showPage(page) {
+    document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
+    $('page-'+page).classList.remove('hidden');
+    document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.page===page));
+    $('page-title').textContent = titles[page];
+  }
+  document.querySelectorAll('nav button').forEach(b => b.addEventListener('click',()=>showPage(b.dataset.page)));
+  document.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click',()=>showPage(b.dataset.goto)));
+  function renderDocs() {
+    const q = $('doc-search').value.toLowerCase();
+    const arr = state.docs.filter(x => (x.title+' '+x.category+' '+x.notes).toLowerCase().includes(q));
+    $('doc-list').innerHTML = arr.length ? arr.map(x=>`<div class="item"><div style="flex:1"><div class="item-title">${esc(x.title)}</div><span class="tag">${esc(x.category)}</span>${x.notes?`<p class="muted">${esc(x.notes)}</p>`:''}${x.url?`<p><a class="file-link" href="${esc(x.url)}" target="_blank" rel="noopener">Abrir enlace ↗</a></p>`:''}</div><button class="secondary" data-delete-doc="${x.id}" aria-label="Eliminar documento">Eliminar</button></div>`).join('') : '<div class="empty">Aún no hay documentos en tu lista.</div>';
+    document.querySelectorAll('[data-delete-doc]').forEach(b=>b.onclick=()=>{state.docs=state.docs.filter(x=>x.id!==b.dataset.deleteDoc);persist();render();});
+  }
+  function renderRefs() {
+    const q = $('ref-search').value.toLowerCase();
+    const arr = state.refs.filter(x => (x.title+' '+x.type+' '+x.author+' '+x.body).toLowerCase().includes(q));
+    $('ref-list').innerHTML = arr.length ? arr.map(x=>`<div class="item"><div style="flex:1"><div class="item-title">${esc(x.title)}</div><span class="tag">${esc(x.type)}</span>${x.author?`<p class="muted">${esc(x.author)}</p>`:''}${x.body?`<p>${esc(x.body).replace(/\n/g,'<br>')}</p>`:''}</div><button class="secondary" data-delete-ref="${x.id}">Eliminar</button></div>`).join('') : '<div class="empty">Todavía no has guardado notas o referencias.</div>';
+    document.querySelectorAll('[data-delete-ref]').forEach(b=>b.onclick=()=>{const r=state.refs.find(x=>x.id===b.dataset.deleteRef);if(r&&r.noteId)state.notes=state.notes.filter(n=>n.id!==r.noteId);state.refs=state.refs.filter(x=>x.id!==b.dataset.deleteRef);persist();render();});
+  }
+  function renderNotes() {
+    const q = $('note-search').value.toLowerCase();
+    const arr = state.notes.filter(n => (n.title+' '+n.body).toLowerCase().includes(q));
+    $('note-list').innerHTML = arr.length ? arr.map(n=>`<div class="item"><div style="flex:1;min-width:0"><div class="item-title">${esc(n.title)}</div><p>${esc(n.body).replace(/\n/g,'<br>')}</p></div><button class="secondary" data-delete-note="${n.id}">Eliminar</button></div>`).join('') : '<div class="empty">Todavía no has guardado notas.</div>';
+    document.querySelectorAll('[data-delete-note]').forEach(b=>b.onclick=()=>{const nid=b.dataset.deleteNote;state.notes=state.notes.filter(n=>n.id!==nid);state.refs=state.refs.filter(r=>r.noteId!==nid);persist();render();});
+  }
+  function taskHTML(t) {
+    return `<div class="item"><input type="checkbox" data-toggle-task="${t.id}" ${t.done?'checked':''} aria-label="Marcar tarea como completada"><div style="flex:1;min-width:0"><div class="item-title ${t.done?'done':''}">${esc(t.title)}</div><div class="muted">${t.date?'Fecha: '+esc(dateLabel(t.date))+' · ':''}Prioridad: ${esc(t.priority)}</div></div><button class="secondary" data-delete-task="${t.id}">Eliminar</button></div>`;
+  }
+  function renderTasks() {
+    const filter=$('task-filter').value;
+    const arr=state.tasks.filter(t=>filter==='all'||(filter==='done'?t.done:!t.done)).sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999'));
+    $('task-list').innerHTML=arr.length?arr.map(taskHTML).join(''):'<div class="empty">No hay tareas en esta vista.</div>';
+    $('home-tasks').innerHTML=state.tasks.filter(t=>!t.done).slice(0,4).map(taskHTML).join('')||'<div class="empty">No tienes tareas pendientes. ¡Buen trabajo!</div>';
+    document.querySelectorAll('[data-toggle-task]').forEach(b=>b.onchange=()=>{const t=state.tasks.find(t=>t.id===b.dataset.toggleTask);if(t)t.done=b.checked;persist();render();});
+    document.querySelectorAll('[data-delete-task]').forEach(b=>b.onclick=()=>{state.tasks=state.tasks.filter(t=>t.id!==b.dataset.deleteTask);persist();render();});
+  }
+  function render() {
+    renderDocs(); renderRefs(); renderTasks(); renderNotes();
+    $('count-notes').textContent=state.notes.length;
+    $('count-tasks').textContent=state.tasks.filter(t=>!t.done).length;
+    $('count-refs').textContent=state.refs.length;
+  }
+  const id = () => (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random()));
+  $('save-quick-note').onclick=()=>{
+    const title=$('quick-note').value.trim(), body=$('quick-body').value.trim();
+    if(!title||!body){alert('Escribe un título y el contenido de la nota.');return;}
+    const nid=id(); state.notes.unshift({id:nid,title,body}); state.refs.unshift({id:id(),noteId:nid,title,type:'Nota de investigación',author:'',body});
+    $('quick-note').value='';$('quick-body').value='';persist();render();alert('Nota guardada en este navegador.');
+  };
+  $('add-doc').onclick=()=>{
+    const title=$('doc-title').value.trim(); if(!title){alert('Escribe el nombre del documento.');return;}
+    const url=$('doc-url').value.trim();
+    if(url && !/^https?:\/\//i.test(url)){alert('El enlace debe comenzar con http:// o https://');return;}
+    state.docs.unshift({id:id(),title,category:$('doc-category').value,url,notes:$('doc-notes').value.trim()});
+    ['doc-title','doc-url','doc-notes'].forEach(k=>$(k).value='');persist();render();
+  };
+  $('add-ref').onclick=()=>{
+    const title=$('ref-title').value.trim(); if(!title){alert('Escribe un título.');return;}
+    state.refs.unshift({id:id(),title,type:$('ref-type').value,author:$('ref-author').value.trim(),body:$('ref-body').value.trim()});
+    ['ref-title','ref-author','ref-body'].forEach(k=>$(k).value='');persist();render();
+  };
+  $('add-task').onclick=()=>{
+    const title=$('task-title').value.trim(); if(!title){alert('Escribe la tarea.');return;}
+    state.tasks.unshift({id:id(),title,date:$('task-date').value,priority:$('task-priority').value,done:false});
+    $('task-title').value='';$('task-date').value='';persist();render();
+  };
+  $('doc-search').addEventListener('input',renderDocs);
+  $('note-search').addEventListener('input',renderNotes);
+  $('ref-search').addEventListener('input',renderRefs);
+  $('task-filter').addEventListener('change',renderTasks);
+  $('local-files').addEventListener('change',()=>{
+    const files=[...$('local-files').files];
+    $('file-list').innerHTML=files.length?files.map(f=>{
+      const isImage=f.type.startsWith('image/');
+      const url=isImage?URL.createObjectURL(f):null;
+      return `<div class="item">${isImage?`<img src="${url}" alt="" style="width:76px;height:76px;object-fit:cover;border-radius:9px">`:'<div style="font-size:1.8rem">▤</div>'}<div><div class="item-title">${esc(f.name)}</div><div class="muted">${(f.size/1024).toFixed(1)} KB · Vista previa temporal</div>${!isImage&&f.type==='application/pdf'?'<span class="tag">PDF seleccionado</span>':''}</div></div>`;
+    }).join(''):'<div class="empty">Los archivos que selecciones aparecerán aquí temporalmente.</div>';
+  });
+  // ---- Ventana emergente (modal) ----
+  const modal = $('modal'), modalBox = $('modal-box');
+  let lastFocus = null;
+  function openModal(html) {
+    lastFocus = document.activeElement;
+    modalBox.innerHTML = html;
+    modal.classList.remove('hidden');
+    const f = modalBox.querySelector('input,textarea');
+    if (f) f.focus();
+  }
+  function closeModal() {
+    modal.classList.add('hidden');
+    modalBox.innerHTML = '';
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  modal.addEventListener('click', e => { if (e.target === modal || e.target.closest('[data-close-modal]')) closeModal(); });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (!modal.classList.contains('hidden')) closeModal(); else hideResults();
+  });
+
+  // ---- Formulario en ventana emergente: nueva nota ----
+  function newNoteModal() {
+    openModal(`<h2>Nueva nota</h2>
+      <div class="field"><label for="m-title">Título</label><input id="m-title" placeholder="Ej. Idea para mi investigación"></div>
+      <div class="field"><label for="m-body">Contenido</label><textarea id="m-body" placeholder="Escribe aquí..."></textarea></div>
+      <div id="m-error" class="form-error" role="alert"></div>
+      <div class="modal-actions"><button class="secondary" data-close-modal>Cancelar</button><button class="primary" id="m-save">Guardar nota</button></div>`);
+    $('m-save').onclick = () => {
+      const title = $('m-title').value.trim(), body = $('m-body').value.trim();
+      if (!title || !body) { $('m-error').textContent = 'Escribe un título y el contenido de la nota.'; return; }
+      const nid = id();
+      state.notes.unshift({ id: nid, title, body });
+      state.refs.unshift({ id: id(), noteId: nid, title, type: 'Nota de investigación', author: '', body });
+      persist(); render(); closeModal();
+    };
+  }
+  $('open-new-note').onclick = newNoteModal;
+
+  // ---- Ver una nota completa en ventana emergente ----
+  function noteViewModal(nid) {
+    const n = state.notes.find(x => x.id === nid);
+    if (!n) return;
+    openModal(`<h2>${esc(n.title)}</h2><p>${esc(n.body).replace(/\n/g, '<br>')}</p>
+      <div class="modal-actions"><button class="secondary" id="m-delete">Eliminar nota</button><button class="primary" data-close-modal>Cerrar</button></div>`);
+    $('m-delete').onclick = () => {
+      state.notes = state.notes.filter(x => x.id !== nid);
+      state.refs = state.refs.filter(r => r.noteId !== nid);
+      persist(); render(); closeModal();
+    };
+  }
+
+  // ---- Buscador global ----
+  const kindLabel = { nota: 'Nota', doc: 'Documento', ref: 'Investigación', task: 'Tarea' };
+  const kindPage = { doc: 'documentos', ref: 'investigacion', task: 'tareas' };
+  function searchAll(q) {
+    q = q.trim().toLowerCase();
+    if (!q) return [];
+    const hit = s => s.toLowerCase().includes(q);
+    const out = [];
+    state.notes.forEach(n => { if (hit(n.title + ' ' + n.body)) out.push({ kind: 'nota', id: n.id, title: n.title, text: n.body }); });
+    state.docs.forEach(d => { if (hit(d.title + ' ' + d.category + ' ' + d.notes)) out.push({ kind: 'doc', id: d.id, title: d.title, text: d.category + (d.notes ? ' · ' + d.notes : '') }); });
+    state.refs.forEach(r => {
+      const isNoteCopy = r.noteId || state.notes.some(n => n.title === r.title && n.body === r.body);
+      if (!isNoteCopy && hit(r.title + ' ' + r.type + ' ' + r.author + ' ' + r.body)) out.push({ kind: 'ref', id: r.id, title: r.title, text: r.type + (r.author ? ' · ' + r.author : '') });
+    });
+    state.tasks.forEach(t => { if (hit(t.title)) out.push({ kind: 'task', id: t.id, title: t.title, text: (t.done ? 'Completada' : 'Pendiente') + ' · Prioridad ' + t.priority }); });
+    return out;
+  }
+  const resultsBox = $('search-results'), searchInput = $('global-search');
+  function hideResults() { resultsBox.classList.add('hidden'); }
+  function showResults() {
+    const q = searchInput.value;
+    if (!q.trim()) { hideResults(); return; }
+    const res = searchAll(q).slice(0, 8);
+    resultsBox.innerHTML = res.length
+      ? res.map(r => `<button class="result" data-kind="${r.kind}" data-id="${esc(r.id)}"><span class="tag">${kindLabel[r.kind]}</span><div class="item-title">${esc(r.title)}</div><span class="muted">${esc(r.text)}</span></button>`).join('')
+      : '<div class="empty" style="border:0">Sin resultados para esa búsqueda.</div>';
+    resultsBox.classList.remove('hidden');
+  }
+  searchInput.addEventListener('input', showResults);
+  searchInput.addEventListener('focus', showResults);
+  resultsBox.addEventListener('click', e => {
+    const b = e.target.closest('.result');
+    if (!b) return;
+    hideResults(); searchInput.value = '';
+    if (b.dataset.kind === 'nota') noteViewModal(b.dataset.id); else showPage(kindPage[b.dataset.kind]);
+  });
+  document.addEventListener('click', e => { if (!e.target.closest('.global-search')) hideResults(); });
+  const CAT=['Personal','Trabajo','Estudios','Trámites','Otro'], TYPES=['Nota de investigación','Libro','Artículo académico','Archivo','Fotografía','Otro'], PRI=['Alta','Normal','Baja'];
+  const schema={
+    notes:{one:'nota',f:[['title','Título','text',1],['body','Contenido','area',1]]},
+    docs:{one:'documento',f:[['title','Nombre','text',1],['category','Categoría',CAT],['url','Enlace (opcional)','url'],['notes','Notas','area']]},
+    refs:{one:'referencia',f:[['title','Título','text',1],['type','Tipo',TYPES],['author','Autor o institución','text'],['body','Resumen o comentario','area']]},
+    tasks:{one:'tarea',f:[['title','Tarea','text',1],['date','Fecha límite','date'],['priority','Prioridad',PRI]]}
+  };
+  state.refs = state.refs.filter(r => !r.noteId && !state.notes.some(n => n.title === r.title && n.body === r.body));
+  persist();
+  let toastTimer;
+  function toast(msg, label, fn) {
+    const t = $('toast'); t.innerHTML = '';
+    const s = document.createElement('span'); s.textContent = msg; t.appendChild(s);
+    if (label) { const b = document.createElement('button'); b.textContent = label; b.onclick = () => { fn(); t.classList.add('hidden'); }; t.appendChild(b); }
+    t.classList.remove('hidden'); clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.add('hidden'), label ? 7000 : 3500);
+  }
+  const actions = (k, i) => `<div class="actions"><button class="secondary" data-edit="${k}" data-id="${esc(i)}">Editar</button><button class="secondary" data-del="${k}" data-id="${esc(i)}">Eliminar</button></div>`;
+  const todayISO = () => new Date().toLocaleDateString('sv-SE');
+  const nl = s => esc(s).replace(/\n/g, '<br>');
+  function commit(kind, data) {
+    const it = { id: id(), ...data };
+    if (kind === 'notes') it.at = Date.now();
+    if (kind === 'tasks') it.done = false;
+    state[kind].unshift(it); persist(); render();
+  }
+  function removeItem(kind, eid) {
+    const i = state[kind].findIndex(x => x.id === eid); if (i < 0) return;
+    const [it] = state[kind].splice(i, 1); persist(); render();
+    toast('Eliminado.', 'Deshacer', () => { state[kind].splice(Math.min(i, state[kind].length), 0, it); persist(); render(); });
+  }
+  function formModal(kind, eid) {
+    const sc = schema[kind], it = eid ? state[kind].find(x => x.id === eid) : null;
+    if (eid && !it) return;
+    openModal(`<h2>${it ? 'Editar' : 'Nueva'} ${sc.one}</h2>` + sc.f.map(([k, l, t]) => {
+      const v = it ? (it[k] ?? '') : (k === 'priority' ? 'Normal' : ''), i = 'm-' + k;
+      const c = Array.isArray(t) ? `<select id="${i}">${t.map(o => `<option${o === v ? ' selected' : ''}>${esc(o)}</option>`).join('')}</select>` : t === 'area' ? `<textarea id="${i}">${esc(v)}</textarea>` : `<input id="${i}" type="${t}" value="${esc(v)}">`;
+      return `<div class="field"><label for="${i}">${l}</label>${c}</div>`;
+    }).join('') + `<div id="m-error" class="form-error" role="alert"></div><div class="modal-actions"><button class="secondary" data-close-modal>Cancelar</button><button class="primary" id="m-save">Guardar</button></div>`);
+    $('m-save').onclick = () => {
+      const d = {};
+      for (const [k, l, t, r] of sc.f) {
+        const v = $('m-' + k).value.trim();
+        if (r && !v) { $('m-error').textContent = 'Completa: ' + l + '.'; return; }
+        if (k === 'url' && v && !/^https?:\/\//i.test(v)) { $('m-error').textContent = 'El enlace debe comenzar con http:// o https://'; return; }
+        d[k] = v;
+      }
+      if (it) Object.assign(it, d); else commit(kind, d);
+      persist(); render(); closeModal(); toast('Guardado.');
+    };
+  }
+  function newNoteModal() { formModal('notes'); }
+  function noteViewModal(nid) {
+    const n = state.notes.find(x => x.id === nid); if (!n) return;
+    openModal(`<h2>${esc(n.title)}</h2><p>${nl(n.body)}</p><div class="modal-actions"><button class="secondary" data-del="notes" data-id="${esc(n.id)}">Eliminar</button><button class="secondary" data-edit="notes" data-id="${esc(n.id)}">Editar</button><button class="primary" data-close-modal>Cerrar</button></div>`);
+  }
+  function renderNotes() {
+    const q = $('note-search').value.toLowerCase();
+    const a = state.notes.filter(n => (n.title + ' ' + n.body).toLowerCase().includes(q));
+    $('note-list').innerHTML = a.length ? a.map(n => `<div class="item"><div style="flex:1;min-width:0"><div class="item-title">${esc(n.title)}</div>${n.at ? `<div class="muted">${esc(new Date(n.at).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' }))}</div>` : ''}<p>${nl(n.body)}</p></div>${actions('notes', n.id)}</div>`).join('') : '<div class="empty">Todavía no has guardado notas.</div>';
+  }
+  function renderDocs() {
+    const q = $('doc-search').value.toLowerCase();
+    const a = state.docs.filter(x => (x.title + ' ' + x.category + ' ' + x.notes).toLowerCase().includes(q));
+    $('doc-list').innerHTML = a.length ? a.map(x => `<div class="item"><div style="flex:1;min-width:0"><div class="item-title">${esc(x.title)}</div><span class="tag">${esc(x.category)}</span>${x.notes ? `<p class="muted">${esc(x.notes)}</p>` : ''}${x.url ? `<p><a class="file-link" href="${esc(x.url)}" target="_blank" rel="noopener">Abrir enlace ↗</a></p>` : ''}</div>${actions('docs', x.id)}</div>`).join('') : '<div class="empty">Aún no hay documentos en tu lista.</div>';
+  }
+  function renderRefs() {
+    const q = $('ref-search').value.toLowerCase();
+    const a = state.refs.filter(x => (x.title + ' ' + x.type + ' ' + x.author + ' ' + x.body).toLowerCase().includes(q));
+    $('ref-list').innerHTML = a.length ? a.map(x => `<div class="item"><div style="flex:1;min-width:0"><div class="item-title">${esc(x.title)}</div><span class="tag">${esc(x.type)}</span>${x.author ? `<p class="muted">${esc(x.author)}</p>` : ''}${x.body ? `<p>${nl(x.body)}</p>` : ''}</div>${actions('refs', x.id)}</div>`).join('') : '<div class="empty">Todavía no has guardado notas o referencias.</div>';
+  }
+  function taskHTML(t) {
+    const late = t.date && !t.done && t.date < todayISO();
+    return `<div class="item"><input type="checkbox" data-toggle="${esc(t.id)}" ${t.done ? 'checked' : ''} aria-label="Marcar tarea como completada"><div style="flex:1;min-width:0"><div class="item-title ${t.done ? 'done' : ''}">${esc(t.title)}</div><div class="muted">${t.date ? esc(dateLabel(t.date)) : 'Sin fecha'}</div><span class="tag ${esc(String(t.priority).toLowerCase())}">${esc(t.priority)}</span>${late ? '<span class="tag vencida">Vencida</span>' : ''}</div>${actions('tasks', t.id)}</div>`;
+  }
+  function sortTasks(a) {
+    const p = { Alta: 0, Normal: 1, Baja: 2 };
+    return a.slice().sort((x, y) => (x.done ? 1 : 0) - (y.done ? 1 : 0) || (x.date || '9999').localeCompare(y.date || '9999') || (p[x.priority] ?? 1) - (p[y.priority] ?? 1));
+  }
+  function renderTasks() {
+    const f = $('task-filter').value;
+    const a = sortTasks(state.tasks.filter(t => f === 'all' || (f === 'done' ? t.done : !t.done)));
+    $('task-list').innerHTML = a.length ? a.map(taskHTML).join('') : '<div class="empty">No hay tareas en esta vista.</div>';
+    $('home-tasks').innerHTML = sortTasks(state.tasks.filter(t => !t.done)).slice(0, 4).map(taskHTML).join('') || '<div class="empty">No tienes tareas pendientes. ¡Buen trabajo!</div>';
+  }
+  const backupJSON = () => JSON.stringify({ app: 'mi-espacio-personal', version: 2, docs: state.docs, refs: state.refs, tasks: state.tasks, notes: state.notes }, null, 2);
+  function render() {
+    renderDocs(); renderRefs(); renderTasks(); renderNotes();
+    $('count-notes').textContent = state.notes.length;
+    $('count-tasks').textContent = state.tasks.filter(t => !t.done).length;
+    $('count-refs').textContent = state.refs.length;
+    $('backup-text').value = backupJSON();
+  }
+  document.addEventListener('click', e => {
+    const ed = e.target.closest('[data-edit]');
+    if (ed) { formModal(ed.dataset.edit, ed.dataset.id); return; }
+    const dl = e.target.closest('[data-del]');
+    if (dl) { if (!modal.classList.contains('hidden')) closeModal(); removeItem(dl.dataset.del, dl.dataset.id); }
+  });
+  document.addEventListener('change', e => {
+    const c = e.target.closest('[data-toggle]'); if (!c) return;
+    const t = state.tasks.find(x => x.id === c.dataset.toggle);
+    if (t) { t.done = c.checked; persist(); render(); }
+  });
+  const val = i => $(i).value.trim();
+  $('save-quick-note').onclick = () => {
+    const title = val('quick-note'), body = val('quick-body');
+    if (!title || !body) return toast('Escribe un título y el contenido de la nota.');
+    commit('notes', { title, body }); $('quick-note').value = ''; $('quick-body').value = ''; toast('Nota guardada.');
+  };
+  $('add-doc').onclick = () => {
+    const title = val('doc-title'), url = val('doc-url');
+    if (!title) return toast('Escribe el nombre del documento.');
+    if (url && !/^https?:\/\//i.test(url)) return toast('El enlace debe comenzar con http:// o https://');
+    commit('docs', { title, category: $('doc-category').value, url, notes: val('doc-notes') });
+    ['doc-title', 'doc-url', 'doc-notes'].forEach(k => $(k).value = ''); toast('Documento agregado.');
+  };
+  $('add-ref').onclick = () => {
+    const title = val('ref-title');
+    if (!title) return toast('Escribe un título.');
+    commit('refs', { title, type: $('ref-type').value, author: val('ref-author'), body: val('ref-body') });
+    ['ref-title', 'ref-author', 'ref-body'].forEach(k => $(k).value = ''); toast('Guardado en investigación.');
+  };
+  $('add-task').onclick = () => {
+    const title = val('task-title');
+    if (!title) return toast('Escribe la tarea.');
+    commit('tasks', { title, date: $('task-date').value, priority: $('task-priority').value });
+    $('task-title').value = ''; $('task-date').value = ''; toast('Tarea agregada.');
+  };
+  $('copy-backup').onclick = async () => {
+    const t = $('backup-text'); let ok = true;
+    try { await navigator.clipboard.writeText(t.value); } catch (e) { t.select(); try { ok = document.execCommand('copy'); } catch (_) { ok = false; } }
+    toast(ok ? 'Respaldo copiado.' : 'Selecciona el texto y cópialo manualmente.');
+  };
+  function restore(text) {
+    const err = $('restore-error'); let d;
+    try { d = JSON.parse(text); } catch (e) { err.textContent = 'El texto no es un respaldo válido.'; return; }
+    if (!d || typeof d !== 'object' || !['docs', 'refs', 'tasks', 'notes'].some(k => Array.isArray(d[k]))) { err.textContent = 'No encontré datos de Mi espacio personal en ese texto.'; return; }
+    const clean = x => Array.isArray(x) ? x.filter(i => i && typeof i === 'object' && i.id) : [];
+    const prev = JSON.parse(JSON.stringify(state));
+    state = { docs: clean(d.docs), refs: clean(d.refs), tasks: clean(d.tasks), notes: clean(d.notes) };
+    persist(); render(); err.textContent = ''; $('restore-text').value = '';
+    toast('Respaldo restaurado.', 'Deshacer', () => { state = prev; persist(); render(); });
+  }
+  $('restore-btn').onclick = () => restore($('restore-text').value);
+  $('restore-file').addEventListener('change', e => {
+    const f = e.target.files[0]; if (!f) return;
+    const r = new FileReader(); r.onload = () => { $('restore-text').value = r.result; restore(r.result); }; r.readAsText(f); e.target.value = '';
+  });
+  render();
+</script>
+</body>
+</html>
